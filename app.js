@@ -105,12 +105,12 @@
     els.cardPreview.style.transform = `scale(${scale})`;
     els.scaleLabel.textContent = Math.round(scale * 100) + '%';
 
-    els.measurementRow.innerHTML = `<span><i></i> ${dim.width} × ${dim.height} px</span><span>${template.toUpperCase()}</span>`;
+    els.measurementRow.innerHTML = `<span><i></i> ${dim.width} × ${dim.height} px</span><span>${dim.label.split(' · ')[0]}</span>`;
 
     els.refPreviewFrame.className = 'reference-preview-frame ' + template;
     els.refComparisonVisual.className = 'comparison-visual' + (template === 'wide' ? ' wide' : '');
     els.refMiniCopy.className = 'mini-copy ' + template;
-    els.refLabel.textContent = '当前: ' + template.toUpperCase();
+    els.refLabel.textContent = '当前: ' + dim.label.split(' · ')[0];
     els.refCurrentSize.textContent = `${dim.width} × ${dim.height}`;
 
     updateCardBg();
