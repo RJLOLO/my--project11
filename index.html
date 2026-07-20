@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1+1 资源位卡片编辑器</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='2' y='2' width='10' height='10' rx='2' fill='%232E9EFF'/><rect x='15' y='2' width='5' height='7' rx='1' fill='%230C79D8'/><rect x='2' y='15' width='5' height='7' rx='1' fill='%230C79D8'/><rect x='12' y='12' width='10' height='10' rx='2' fill='%2368C4FF'/></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="brand-mark">1+1</div>
+      <div>
+        <p class="eyebrow">资源卡片</p>
+        <h1>资源位卡片编辑器</h1>
+      </div>
+      <div class="spec-pill" id="specPill">紧凑 · 640 × 272</div>
+      <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span class="theme-icon">◐</span>
+      </button>
+    </header>
+
+    <!-- Workspace -->
+    <div class="workspace">
+      <!-- Preview Panel -->
+      <div class="preview-panel">
+        <div class="section-heading">
+          <div>
+            <span class="step">01</span>
+            <h2>预览</h2>
+          </div>
+          <span class="scale-label" id="scaleLabel">82%</span>
+        </div>
+        <div class="preview-stage">
+          <div class="preview-frame compact" id="previewFrame">
+            <div class="card-preview compact" id="cardPreview">
+              <div class="card-copy" id="cardCopy">
+                <div class="card-title" id="cardTitle">主标题文案</div>
+                <div class="card-subtitle" id="cardSubtitle">副标题文案</div>
+              </div>
+              <img class="uploaded-card-icon" id="cardIcon" style="display:none" alt="icon">
+              <div class="icon-guide-frame" id="iconGuide"></div>
+            </div>
+          </div>
+        </div>
+        <div class="measurement-row" id="measurementRow">
+          <span><i></i> 640 × 272 px</span>
+          <span>紧凑</span>
+        </div>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="controls-panel">
+        <!-- Template Switcher -->
+        <div class="section-heading">
+          <div>
+            <span class="step">02</span>
+            <h2>配置</h2>
+          </div>
+        </div>
+
+        <div class="template-switcher">
+          <button class="active" data-template="compact" onclick="switchTemplate('compact')">
+            <span>紧凑</span>
+          </button>
+          <button data-template="wide" onclick="switchTemplate('wide')">
+            <span>宽版</span>
+          </button>
+        </div>
+
+        <!-- Button Style -->
+        <div class="button-style-group">
+          <span class="button-style-label">按钮样式</span>
+          <div class="button-style-switcher">
+            <button class="active" data-style="rounded" onclick="switchButtonStyle('rounded')">圆角</button>
+            <button data-style="pill" onclick="switchButtonStyle('pill')">胶囊</button>
+          </div>
+        </div>
+
+        <!-- Color Presets -->
+        <div class="button-style-group">
+          <span class="button-style-label">配色</span>
+          <div class="button-style-switcher">
+            <button class="active" data-color="yellow" onclick="switchColor('yellow')">
+              <span class="color-dot yellow"></span> 暖黄
+            </button>
+            <button data-color="blue" onclick="switchColor('blue')">
+              <span class="color-dot blue"></span> 冷蓝
+            </button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Text Inputs -->
+        <div class="field-group">
+          <label>标题 <small>主标题文案</small></label>
+          <input type="text" id="titleInput" value="主标题文案" maxlength="10" placeholder="输入标题">
+        </div>
+        <div class="field-group">
+          <label>副标题 <small>副标题文案</small></label>
+          <input type="text" id="subtitleInput" value="副标题文案" maxlength="12" placeholder="输入副标题">
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Icon Upload -->
+        <div class="upload-heading">
+          <span class="step">03</span>
+          <h2>图标</h2>
+          <small>上传装饰图标</small>
+        </div>
+        <div class="drop-zone" id="iconDropZone">
+          <div class="upload-icon">↑</div>
+          <div class="upload-copy">
+            <strong id="iconFileName">拖拽或点击上传图标</strong>
+            <small>支持 PNG / SVG / JPG，建议透明底</small>
+          </div>
+          <button class="choose-button" onclick="document.getElementById('iconFileInput').click()">选择文件</button>
+          <input type="file" id="iconFileInput" accept="image/*" style="display:none">
+        </div>
+
+        <!-- Icon Adjustments -->
+        <div class="icon-adjustments" id="iconAdjustments" style="display:none">
+          <div class="icon-adjustments-heading">
+            <strong>图标调整</strong>
+          </div>
+          <div class="position-range-grid">
+            <label class="range-field">
+              <span>水平位置 <output id="iconXOutput">50%</output></span>
+              <input type="range" id="iconXRange" min="0" max="100" value="50">
+            </label>
+            <label class="range-field">
+              <span>垂直位置 <output id="iconYOutput">50%</output></span>
+              <input type="range" id="iconYRange" min="0" max="100" value="50">
+            </label>
+          </div>
+          <div class="position-range-grid">
+            <label class="range-field">
+              <span>大小 <output id="iconSizeOutput">100%</output></span>
+              <input type="range" id="iconSizeRange" min="30" max="200" value="100">
+            </label>
+            <label class="range-field">
+              <span>旋转 <output id="iconRotateOutput">0°</output></span>
+              <input type="range" id="iconRotateRange" min="-180" max="180" value="0">
+            </label>
+          </div>
+          <p class="drag-hint">💡 也可以直接在预览区拖拽图标</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Background Upload -->
+        <div class="upload-heading">
+          <span class="step">04</span>
+          <h2>背景</h2>
+          <small>自定义卡片背景</small>
+        </div>
+        <div class="drop-zone" id="bgDropZone">
+          <div class="upload-icon">🖼</div>
+          <div class="upload-copy">
+            <strong id="bgFileName">拖拽或点击上传背景图</strong>
+            <small>支持 PNG / JPG，建议 640×272 以上</small>
+          </div>
+          <button class="choose-button" onclick="document.getElementById('bgFileInput').click()">选择文件</button>
+          <input type="file" id="bgFileInput" accept="image/*" style="display:none">
+        </div>
+        <p class="fixed-background-note">背景图会覆盖整个卡片区域</p>
+
+        <div class="divider"></div>
+
+        <!-- Export -->
+        <div class="export-actions">
+          <button class="export-button" id="exportBtn" onclick="exportCard()">
+            <span>导出卡片</span>
+            <small>PNG · 原尺寸</small>
+          </button>
+          <p class="privacy-note">所有操作在浏览器本地完成，不会上传任何文件</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reference Section -->
+    <div class="preview-reference-section">
+      <div class="simple-reference-heading">
+        <div>
+          <span class="step">REF</span>
+          <h2>参考对比</h2>
+        </div>
+        <span class="reference-current-label" id="refLabel">当前: 紧凑</span>
+      </div>
+      <div class="reference-comparison-list">
+        <div class="reference-comparison-item">
+          <div class="reference-comparison-label">
+            <strong>当前编辑</strong>
+            <span id="refCurrentSize">640 × 272</span>
+          </div>
+          <div class="reference-preview-frame compact" id="refPreviewFrame">
+            <div class="comparison-visual" id="refComparisonVisual">
+              <div class="mini-card" id="refMiniCard">
+                <div class="mini-copy compact" id="refMiniCopy">
+                  <div class="mini-title" id="refMiniTitle">主标题文案</div>
+                  <div class="mini-subtitle" id="refMiniSubtitle">副标题文案</div>
+                </div>
+                <img class="mini-icon" id="refMiniIcon" style="display:none" alt="icon">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
